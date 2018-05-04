@@ -8,10 +8,17 @@ const H1 = ({classNameAcolocar, prefixoDeTexto, children}) => {
   return <div className={classNameAcolocar}> {prefixoDeTexto} o nosso h1 {children}</div>
 }
 
-const LI = ({item, dia, estado}) =>{
-  return <ul><li>{item}</li> <li>{dia}</li> <li>{estado}</li></ul>
+const LI = ({item, data, estado}) =>{
+  return <li><span>{item}</span> <span>{data.toLocaleString()}</span> <span>{estado ? "Completo" : "Incompleto"}</span></li>
 } 
 
+const Todolist = () =>{
+  return (  <ul>          
+  <LI item="Lavar o Pato" data={ new Date(1987,7,16)} estado={true}/>
+  <LI item="Cancelar a viagem a marte" data={new Date(2068,7,16)} estado={false}/>
+  <LI item="DAMN GO BACK!" data={new Date(2077,7,16)} estado={false}/>
+  </ul>)
+}
 /*
 function H1 (props){
   return <div className={props.classNameAcolocar}> {props.prefixoDeTexto} o nosso h1 {props.children}</div>
@@ -31,9 +38,7 @@ class App extends Component {
           Abaixo encontra-se uma lista :V
         </p>
         <div className="Todolist">
-            <LI item="Lavar o Pato" dia="16/7/1987" estado="completo"></LI>
-            <LI item="Cancelar a viagem a marte" dia="16/7/2068" estado="completo"></LI>
-            <LI item="DAMN GO BACK!" dia="16/7/2077" estado="incompleto"></LI>
+            <Todolist/>
             
         </div>
       </div>
