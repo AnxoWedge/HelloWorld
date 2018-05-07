@@ -26,7 +26,41 @@ function H1 (props){
 */
 
 class App extends Component {
+  constructor(props){
+    super(props); // sempre invocar este/ constructor da class Component
+    this.state= {
+      newDate: new Date()
+    }
+
+  }
+  //por ordem 
+  componentWillMount(){
+    console.log('componentWillMount');
+    this.interval = setInterval(()=>{
+      this.setState({newDate: new Date()})
+    },900)
+  }
+  componentDidMount(){
+    console.log('componentDidMount');
+  }
+  componentWillReceiveProps(){
+    console.log('componentWillReceiveProps');
+  }
+  shouldComponentUpdate(){
+    console.log('shouldComponentUpdate');
+    return this.state.newDate.getSeconds()% 2 === 0 ? true : false ;
+  }
+  componentWillUpdate(){
+    console.log('componentWillUpdate');
+  }
+  componentDidUpdate(){
+    console.log('componentDidUpdate');
+  }
+  componentWillUnmount(){
+    console.log('componentWillUnmount');
+  }
   render() { 
+    console.log('RENDER')
     return (
       <div className="App">
         <header className="App-header">
@@ -39,8 +73,10 @@ class App extends Component {
         </p>
         <div className="Todolist">
             <Todolist/>
-            
         </div>
+        <div>
+          { !!this.state.newDate ? this.state.newDate.toLocaleString() : "" }
+          </div>
       </div>
     );
   }
