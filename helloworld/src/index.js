@@ -26,3 +26,25 @@ setInterval(function(){
     clearInterval(interval1);
     ReactDOM.render(<div> Quack </div>, document.getElementById('root'));
 },5000)*/
+
+
+/*
+let ferrari= {
+    nome:" Ferrari"
+}
+
+let Porsche = {
+    nome:" Porsche"
+}
+
+function sayMyName(prefix, suffix, wat){
+    console.log(`${prefix} ${this.nome} ${suffix} ${wat}`)
+}
+
+const sayMyNameFerrari = sayMyName.bind(ferrari, "HERRO", "2nd suffix"); // bind cria a referencia 
+sayMyNameFerrari("1st suffix");
+const sayMyNamePorsche = sayMyName.bind(Porsche); // apply cria e executa 
+sayMyNamePorsche();
+sayMyName();
+
+*/
