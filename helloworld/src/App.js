@@ -29,35 +29,74 @@ class App extends Component {
   constructor(props){
     super(props); // sempre invocar este/ constructor da class Component
     this.state= {
-      newDate: new Date()
+      newDate: new Date(),
+      estado: "on",
+      ticking: true
     }
+    this.toggleTick = this.toggleTick.bind(this);
 
   }
   //por ordem 
   componentWillMount(){
-    console.log('componentWillMount');
-    this.interval = setInterval(()=>{
-      this.setState({newDate: new Date()})
-    },900)
+   // console.log('componentWillMount');
+    this.setupTick(this.state.ticking)
+    // bind é um metodo para definir o scope de execução da função 
   }
   componentDidMount(){
-    console.log('componentDidMount');
+    //console.log('componentDidMount');
   }
   componentWillReceiveProps(){
-    console.log('componentWillReceiveProps');
+   // console.log('componentWillReceiveProps');
   }
   shouldComponentUpdate(){
-    console.log('shouldComponentUpdate');
-    return this.state.newDate.getSeconds()% 2 === 0 ? true : false ;
+   // console.log('shouldComponentUpdate');
+    return true; //this.state.newDate.getSeconds()% 2 === 0 ? true : false ;
   }
   componentWillUpdate(){
-    console.log('componentWillUpdate');
+    //console.log('componentWillUpdate');
   }
   componentDidUpdate(){
-    console.log('componentDidUpdate');
+    //console.log('componentDidUpdate');
   }
   componentWillUnmount(){
-    console.log('componentWillUnmount');
+    //console.log('componentWillUnmount');
+  }
+  tick(){
+    this.setState({newDate: new Date()})
+  }
+
+  setupTick(doTick) {
+    if(doTick){
+      this.interval = setInterval(this.tick.bind(this), 1000)
+      this.tick()
+    } else {
+      clearInterval(this.interval);
+    }
+  }
+
+  toggleTick(){
+    this.setState(prevState => {
+      let nextTickState = !this.state.ticking;
+      this.setupTick(nextTickState);
+      console.log(nextTickState)
+      return {
+      ticking: nextTickState  
+        }
+    });
+    
+
+
+
+/*
+    console.log(this.interval, 'toggle tickorino');
+    console.log(this.state.estado)
+
+
+    if(this.state.estado ===  "on"){
+      this.setState({estado:"off"})
+    }else{
+      this.setState({estado:"on"})
+    }*/
   }
   render() { 
     console.log('RENDER')
@@ -76,7 +115,13 @@ class App extends Component {
         </div>
         <div>
           { !!this.state.newDate ? this.state.newDate.toLocaleString() : "" }
-          </div>
+        </div>
+        <div>
+          { this.state.ticking ? "Ticking" : "Not Ticking"}
+        </div>
+        <div>
+          <button onClick={this.toggleTick}>{ this.state.ticking ? "Parar Relógio" : "Iniciar relógio"}</button>
+        </div>
       </div>
     );
   }
