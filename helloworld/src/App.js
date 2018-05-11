@@ -31,9 +31,17 @@ class App extends Component {
     this.state= {
       newDate: new Date(),
       estado: "on",
-      ticking: true
+      ticking: true,
+      frase: "quackerino",
+      fraserino:[
+        "Quack quack",
+        "Woof woof",
+        "Meow meow",
+        "Blub blub"]
+
     }
     this.toggleTick = this.toggleTick.bind(this);
+    this.randomNumber=this.randomNumber.bind(this);
 
   }
   //por ordem 
@@ -41,6 +49,7 @@ class App extends Component {
    // console.log('componentWillMount');
     this.setupTick(this.state.ticking)
     // bind é um metodo para definir o scope de execução da função 
+    this.setRandomPhrase()
   }
   componentDidMount(){
     //console.log('componentDidMount');
@@ -64,7 +73,21 @@ class App extends Component {
   tick(){
     this.setState({newDate: new Date()})
   }
+//random phrase
+setRandomPhrase(){
+  const frasesAUtilizar = this.state.fraserino;
+  let fraseIndex = Math.round(Math.random()*(frasesAUtilizar.length - 1));
+  this.setState({frase: frasesAUtilizar[fraseIndex]});
 
+}
+randomNumber(){
+    this.setRandomPhrase();
+  
+}
+
+
+
+// Tick
   setupTick(doTick) {
     if(doTick){
       this.interval = setInterval(this.tick.bind(this), 1000)
@@ -121,6 +144,19 @@ class App extends Component {
         </div>
         <div>
           <button onClick={this.toggleTick}>{ this.state.ticking ? "Parar Relógio" : "Iniciar relógio"}</button>
+        </div>
+
+        <div>
+          <p> Frase Aleatória é: {this.state.frase}</p>
+          <button onClick={this.randomNumber}>Punch me</button>
+        </div>
+
+        <div>
+          <ul>
+            {this.state.fraserino.map((item, index)=>{
+              return <li key={"frase" + index}> {item}</li>
+            })}
+          </ul>
         </div>
       </div>
     );
