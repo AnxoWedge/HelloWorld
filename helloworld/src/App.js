@@ -42,6 +42,7 @@ class App extends Component {
     }
     this.toggleTick = this.toggleTick.bind(this);
     this.randomNumber=this.randomNumber.bind(this);
+    this.adderino=this.adderino.bind(this);
 
   }
   //por ordem 
@@ -73,12 +74,29 @@ class App extends Component {
   tick(){
     this.setState({newDate: new Date()})
   }
+//Adding Frase to state array
+/*valueGetter(event){
+  let frasequero = event.target.value;
+return frasequero
+}
+*/
+
+setfrase(frase){
+  const FrasesState = this.state.fraserino;
+  //let newSentence = this.valueGetter();
+  FrasesState.push('whaterino?')
+}
+
+adderino(){
+this.setfrase();
+}
+
+
 //random phrase
 setRandomPhrase(){
   const frasesAUtilizar = this.state.fraserino;
   let fraseIndex = Math.round(Math.random()*(frasesAUtilizar.length - 1));
   this.setState({frase: frasesAUtilizar[fraseIndex]});
-
 }
 randomNumber(){
     this.setRandomPhrase();
@@ -158,9 +176,13 @@ randomNumber(){
             })}
           </ul>
         </div>
+
+        <div>
+          <button onClick={this.adderino}>MORE CRAP</button>
+        </div>
       </div>
     );
   }
 }
-
+// <input type="text" className="insert" value={this.state.value} onChange={this.valueGetter}/>
 export default App;
