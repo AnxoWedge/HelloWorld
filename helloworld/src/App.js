@@ -33,16 +33,18 @@ class App extends Component {
       estado: "on",
       ticking: true,
       frase: "quackerino",
-      fraserino:[
-        "Quack quack",
-        "Woof woof",
-        "Meow meow",
-        "Blub blub"]
+      fraserino:[],
+      frase_add: "",
+      estado_frase: "",
+      update_message:"",
 
     }
     this.toggleTick = this.toggleTick.bind(this);
     this.randomNumber=this.randomNumber.bind(this);
     this.adderino=this.adderino.bind(this);
+    this.inputHandlerino=this.inputHandlerino.bind(this);
+    this.adderinoHandlerino=this.adderinoHandlerino.bind(this);
+    this.handleSubmiterino=this.handleSubmiterino.bind(this);
 
   }
   //por ordem 
@@ -51,9 +53,12 @@ class App extends Component {
     this.setupTick(this.state.ticking)
     // bind é um metodo para definir o scope de execução da função 
     this.setRandomPhrase()
+    this.getLocalFrases()
+
   }
   componentDidMount(){
     //console.log('componentDidMount');
+    this.frase_add.focus()
   }
   componentWillReceiveProps(){
    // console.log('componentWillReceiveProps');
@@ -74,12 +79,7 @@ class App extends Component {
   tick(){
     this.setState({newDate: new Date()})
   }
-//Adding Frase to state array
-/*valueGetter(event){
-  let frasequero = event.target.value;
-return frasequero
-}
-*/
+
 
 setfrase(frase){
   const FrasesState = this.state.fraserino;
@@ -103,7 +103,41 @@ randomNumber(){
   
 }
 
+inputPosterino(){
+  const FrasesState = this.state.fraserino;
+  FrasesState.push(this.state.frase_add)
+}
 
+adderinoHandlerino(){
+  this.inputPosterino()
+}
+
+
+//submiterino
+
+handleSubmiterino(event){
+  event.preventDefault();
+ if(this.state.frase_add !==""){
+
+  this.state.fraserino.push(this.state.frase_add);
+  this.setfrase({fraserino:this.state.fraserino,
+  frase_add:" ",});
+
+  this.setLocalFrases(this.state.fraserino)
+  this.frase_add.focus();
+  }
+  else{
+    alert("Quack")
+  }  
+  this.setLocalFrases(this.state.fraserino)
+}
+
+handleRemoverino(fraseIndex,e){
+  console.log(fraseIndex,e)
+  this.state.fraserino.splice(fraseIndex,1)
+  this.setState({fraserino:this.state.fraserino})
+  this.setLocalFrases(this.state.fraserino)
+}
 
 // Tick
   setupTick(doTick) {
@@ -119,28 +153,39 @@ randomNumber(){
     this.setState(prevState => {
       let nextTickState = !this.state.ticking;
       this.setupTick(nextTickState);
-      console.log(nextTickState)
       return {
       ticking: nextTickState  
         }
     });
-    
-
-
-
-/*
-    console.log(this.interval, 'toggle tickorino');
-    console.log(this.state.estado)
-
-
-    if(this.state.estado ===  "on"){
-      this.setState({estado:"off"})
-    }else{
-      this.setState({estado:"on"})
-    }*/
   }
+  //Adding Frase to state array
+inputHandlerino(event){
+  this.setState({
+    [event.target.name]: event.target.value 
+  });
+}
+
+getLocalFrases(){
+  let fraserino = localStorage.getItem('fraserino')
+  console.log("fraserino", fraserino);
+  if (fraserino===null){
+    fraserino=[];
+  }else{
+    fraserino = JSON.parse(fraserino)
+  }
+  this.setState({fraserino})
+}
+
+setLocalFrases(fraserino){
+  this.setState({update_message:" A gravar"})
+  localStorage.setItem("fraserino", JSON.stringify(fraserino))
+  setTimeout(()=>{
+    this.setState({update_message: " "})
+  }, 2000)
+}
+
+
   render() { 
-    console.log('RENDER')
     return (
       <div className="App">
         <header className="App-header">
@@ -172,17 +217,32 @@ randomNumber(){
         <div>
           <ul>
             {this.state.fraserino.map((item, index)=>{
-              return <li key={"frase" + index}> {item}</li>
+              return <li key={"frase" + index}> {item} <button onClick={this.handleRemoverino.bind(this, index)}> Remove</button></li>
             })}
           </ul>
         </div>
 
         <div>
           <button onClick={this.adderino}>MORE CRAP</button>
+          
+        </div>
+        <div>
+          {this.state.update_message}
+          <form onSubmit={this.handleSubmiterino}>
+          <input type="text" className="insert" name="frase_add" value={this.state.frase_add} onChange={this.inputHandlerino} ref={el => this.frase_add=el}/>
+          <select name="estado_frase" value={this.state.estado_frase} onChange={this.inputHandlerino}>
+            <option value="feito">Feito</option>
+            <option value="nada feito">NADA FEITO</option>
+          
+          </select>
+
+          <button > HIT ME </button>
+          </form>
+          <p>{this.state.frase_add}</p>
         </div>
       </div>
     );
   }
 }
-// <input type="text" className="insert" value={this.state.value} onChange={this.valueGetter}/>
+// 
 export default App;
