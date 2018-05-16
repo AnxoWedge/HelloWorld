@@ -37,6 +37,7 @@ class App extends Component {
       frase_add: "",
       estado_frase: "",
       update_message:"",
+      editerino: false,
 
     }
     this.toggleTick = this.toggleTick.bind(this);
@@ -45,6 +46,7 @@ class App extends Component {
     this.inputHandlerino=this.inputHandlerino.bind(this);
     this.adderinoHandlerino=this.adderinoHandlerino.bind(this);
     this.handleSubmiterino=this.handleSubmiterino.bind(this);
+    this.frase_add=React.createRef();
 
   }
   //por ordem 
@@ -62,6 +64,7 @@ class App extends Component {
   }
   componentWillReceiveProps(){
    // console.log('componentWillReceiveProps');
+   this.handleEditerino()
   }
   shouldComponentUpdate(){
    // console.log('shouldComponentUpdate');
@@ -117,18 +120,28 @@ adderinoHandlerino(){
 
 handleSubmiterino(event){
   event.preventDefault();
- if(this.state.frase_add !==""){
+  if(this.state.editerino === false){
+    if(this.state.frase_add !==""){
 
-  this.state.fraserino.push(this.state.frase_add);
-  this.setfrase({fraserino:this.state.fraserino,
-  frase_add:" ",});
+      this.state.fraserino.push(this.state.frase_add);
+      this.setState({fraserino:this.state.fraserino,
+      frase_add:" ",});
 
-  this.setLocalFrases(this.state.fraserino)
-  this.frase_add.focus();
+      this.setLocalFrases(this.state.fraserino)
+      this.frase_add.focus();
+      }
+      else{
+        alert("Quack")
+      } 
+    } 
+  else if(this.state.editerino === true){
+    const i = this.state.indexerino;
+    let arrayfraserino=this.state.fraserino.slice();
+    arrayfraserino[i]= this.state.frase_add;
+    this.setState({fraserino: arrayfraserino, editerino:false, indexerino:"",})
+
   }
-  else{
-    alert("Quack")
-  }  
+
   this.setLocalFrases(this.state.fraserino)
 }
 
@@ -137,6 +150,14 @@ handleRemoverino(fraseIndex,e){
   this.state.fraserino.splice(fraseIndex,1)
   this.setState({fraserino:this.state.fraserino})
   this.setLocalFrases(this.state.fraserino)
+}
+
+handleUpdaterino(){
+
+}
+
+handleEditerino(fraseIndex,e){
+  this.setState({frase_add: this.state.fraserino[fraseIndex], editerino: true, indexerino: fraseIndex})
 }
 
 // Tick
@@ -217,7 +238,7 @@ setLocalFrases(fraserino){
         <div>
           <ul>
             {this.state.fraserino.map((item, index)=>{
-              return <li key={"frase" + index}> {item} <button onClick={this.handleRemoverino.bind(this, index)}> Remove</button></li>
+              return <li key={"frase" + index}> {item} <button onClick={this.handleEditerino.bind(this,index)}>Editar</button> <button onClick={this.handleRemoverino.bind(this, index)}> Remove</button></li>
             })}
           </ul>
         </div>
