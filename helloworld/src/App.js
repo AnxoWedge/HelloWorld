@@ -55,6 +55,7 @@ class App extends Component {
     this.setupTick(this.state.ticking)
     // bind é um metodo para definir o scope de execução da função 
     this.setRandomPhrase()
+    //this.setLocalFrases([])
     this.getLocalFrases()
 
   }
@@ -123,9 +124,12 @@ handleSubmiterino(event){
   if(this.state.editerino === false){
     if(this.state.frase_add !==""){
 
-      this.state.fraserino.push(this.state.frase_add);
+      this.state.fraserino.push({
+        text: this.state.frase_add,
+        done: this.state.estado_frase === "nada_feito" ? true : false,
+      });
       this.setState({fraserino:this.state.fraserino,
-      frase_add:" ",});
+      frase_add:" ", editerino:false});
 
       this.setLocalFrases(this.state.fraserino)
       this.frase_add.focus();
@@ -160,6 +164,17 @@ handleEditerino(fraseIndex,e){
   this.setState({frase_add: this.state.fraserino[fraseIndex], editerino: true, indexerino: fraseIndex})
 }
 
+handleEdit(fraseIndex,e){
+  this.setState({frase_editing: this.state.frase_editing === fraseIndex ? null : fraseIndex})
+}
+
+
+handleChangeFraseName(fraseIndex, e){
+  this.state.fraserino[fraseIndex].text = e.target.value;
+      this.setState({fraserino:this.state.fraserino,
+      });
+      this.setLocalFrases(this.state.fraserino)
+}
 // Tick
   setupTick(doTick) {
     if(doTick){
@@ -205,6 +220,13 @@ setLocalFrases(fraserino){
   }, 2000)
 }
 
+handleTogglerino(fraseIndex, e){
+  this.state.fraserino[fraseIndex].done = !this.state.fraserino[fraseIndex].done;
+  this.setState({fraserino:this.state.fraserino,
+  });
+  this.setLocalFrases(this.state.fraserino)
+}
+
 
   render() { 
     return (
@@ -238,7 +260,10 @@ setLocalFrases(fraserino){
         <div>
           <ul>
             {this.state.fraserino.map((item, index)=>{
-              return <li key={"frase" + index}> {item} <button onClick={this.handleEditerino.bind(this,index)}>Editar</button> <button onClick={this.handleRemoverino.bind(this, index)}> Remove</button></li>
+              return <li key={"frase" + index} className={item.done ? "tbd" : "done"}> {
+                (this.state.frase_editing === index) ? <input onChange={this.handleChangeFraseName.bind(this,index)} value={item.text}/> : <span>{item.text}</span>}
+                <button className="btn_toggle_done" onClick={this.handleTogglerino.bind(this,index)}>Toggle Done</button> 
+                <button onClick={this.handleEdit.bind(this,index)}>{(this.state.frase_editing===index)? "Stop Edit" : "Edit"} Editar</button> <button onClick={this.handleRemoverino.bind(this, index)}disabled={(!isNaN(this.state.frase_editing) && this.state.frase_editing !== null || this.state.editerino===true)? "disabled" : "" }> Remove</button></li>
             })}
           </ul>
         </div>
@@ -253,7 +278,7 @@ setLocalFrases(fraserino){
           <input type="text" className="insert" name="frase_add" value={this.state.frase_add} onChange={this.inputHandlerino} ref={el => this.frase_add=el}/>
           <select name="estado_frase" value={this.state.estado_frase} onChange={this.inputHandlerino}>
             <option value="feito">Feito</option>
-            <option value="nada feito">NADA FEITO</option>
+            <option value="nada_feito">NADA FEITO</option>
           
           </select>
 

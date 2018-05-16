@@ -29,3 +29,11 @@ li{
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+li.done{
+  background-color: #ff0
+}
+
+li.tbd{
+  background-color: #ff6666;
+}
