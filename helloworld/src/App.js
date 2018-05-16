@@ -100,7 +100,7 @@ this.setfrase();
 setRandomPhrase(){
   const frasesAUtilizar = this.state.fraserino;
   let fraseIndex = Math.round(Math.random()*(frasesAUtilizar.length - 1));
-  this.setState({frase: frasesAUtilizar[fraseIndex]});
+  this.setState({frase: !!frasesAUtilizar[fraseIndex] ? frasesAUtilizar[fraseIndex].text : ""});
 }
 randomNumber(){
     this.setRandomPhrase();
